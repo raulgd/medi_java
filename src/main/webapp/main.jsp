@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@include file="/WEB-INF/jspf/sessionCheck.jspf" %>
 <html>
 	<head>
 		<meta charset="utf8">
@@ -6,11 +7,11 @@
     <title>
 			Medi - The Medical Inventory Web Application
     </title>
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="css/roboto.min.css" rel="stylesheet">
-		<link href="css/material.min.css" rel="stylesheet">
-		<link href="css/ripples.min.css" rel="stylesheet">
-		<link href="css/main_style.css" rel="stylesheet">
+		<link href="${appRoot}/css/bootstrap.min.css" rel="stylesheet">
+		<link href="${appRoot}/css/roboto.min.css" rel="stylesheet">
+		<link href="${appRoot}/css/material.min.css" rel="stylesheet">
+		<link href="${appRoot}/css/ripples.min.css" rel="stylesheet">
+		<link href="${appRoot}/css/main_style.css" rel="stylesheet">
 	</head>
 	<body class="home">
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -32,7 +33,7 @@
 						</form>
           </ul>
 					<ul class="nav navbar-nav navbar-right">
-            <li><a href="javascript:void(0)">Logout</a></li>
+            <li><a href="${appRoot}/logout">Logout</a></li>
 					</ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -222,9 +223,10 @@
 
     <!-- Bootstrap core JavaScript placed at the end of the document so the pages load faster -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/ripples.min.js"></script>
-		<script src="js/material.min.js"></script>
+		<script src="${appRoot}/js/bootstrap.min.js"></script>
+		<script src="${appRoot}/js/ripples.min.js"></script>
+		<script src="${appRoot}/js/material.min.js"></script>
+		<script src="${appRoot}/js/validator.min.js"></script>
 		<script>
 			$(document).ready(function () {
 				// This command is used to initialize some elements and make them work properly

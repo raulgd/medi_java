@@ -1,14 +1,13 @@
 package mx.jimi.medi.views.exceptions;
 
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
- *
- * @author jz2n4h
+ * Catches all 400 exceptions
+ * @author Raul Guerrero Deschamps
  */
 @Provider
 public class BadRequestResourceException implements ExceptionMapper<BadRequestException>
@@ -17,9 +16,8 @@ public class BadRequestResourceException implements ExceptionMapper<BadRequestEx
 	@Override
 	public Response toResponse(BadRequestException e)
 	{
-		String json = new StringBuilder("{\"error\":\"400 Bad Request Exception\",\"message\":\"")
-						.append(e.getMessage()).append("\"}").toString();
-		return Response.status(Response.Status.BAD_REQUEST).entity(json).type(MediaType.APPLICATION_JSON).build();
+		Error err = new Error("400 Bad Request Exception: " + e.getMessage());
+		return Response.status(Response.Status.BAD_REQUEST).entity(err).build();
 	}
 
 }

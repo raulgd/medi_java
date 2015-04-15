@@ -1,4 +1,41 @@
 <!DOCTYPE html>
+<%
+	/**
+	 * If there was an error in logging in, set the variable to reflect the error in the page
+	 */
+	String errorMsg = "";
+	String hasError = "";
+	String btnStyle = "btn-primary";
+	if (request.getParameter("error") != null)
+	{
+		switch (Integer.parseInt(request.getParameter("error")))
+		{
+			case 1:
+				errorMsg = "<div class=\"alert alert-danger alert-login\"><strong>Incorrect e-mail address or password</strong></div>";
+				break;
+			case 2:
+				errorMsg = "<div class=\"alert alert-danger alert-login\"><strong>Your session has expired</strong></div>";
+				break;
+			default:
+				errorMsg = "<div class=\"alert alert-danger alert-login\"><strong>Login Error</strong></div>";
+		}
+	}
+	//set the error style for the form fields
+	if (!errorMsg.equals(""))
+	{
+		hasError = "has-error";
+		btnStyle = "btn-danger";
+	}
+
+	//check, if the user has a session, redirect him to main.jsp
+	if (request.getSession(false) != null)
+	{
+		if (request.getSession(false).getAttribute("user") != null)
+		{
+			response.sendRedirect(getServletContext().getContextPath() + "/main.jsp");
+		}
+	}
+%>
 <html>
 	<head>
 		<meta charset="utf8">
@@ -6,11 +43,11 @@
     <title>
 			Medi - The Medical Inventory Web Application
     </title>
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="css/roboto.min.css" rel="stylesheet">
-		<link href="css/material.min.css" rel="stylesheet">
-		<link href="css/ripples.min.css" rel="stylesheet">
-		<link href="css/style.css" rel="stylesheet">
+		<link href="${appRoot}/css/bootstrap.min.css" rel="stylesheet">
+		<link href="${appRoot}/css/roboto.min.css" rel="stylesheet">
+		<link href="${appRoot}/css/material.min.css" rel="stylesheet">
+		<link href="${appRoot}/css/ripples.min.css" rel="stylesheet">
+		<link href="${appRoot}/css/style.css" rel="stylesheet">
 	</head>
 	<body class="home">
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -37,22 +74,23 @@
 					</div>
 					<div class="col-md-4">
 						<div class="well bs-component">
-							<form class="form-horizontal" method="post" action="login">
+							<form class="form-horizontal" method="post" action="${appRoot}/login" data-toggle="validator" role="form">
 								<fieldset>
 									<legend>Login</legend>
-									<div class="form-group">
+									<%= errorMsg %>
+									<div class="form-group <%= hasError %>">
 										<div class="col-lg-10">
-											<input type="email" class="form-control floating-label" id="email" placeholder="Email">
+											<input type="email" data-error="the email address is invalid" name="email" class="form-control floating-label" id="email" placeholder="e-Mail" required>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group <%= hasError %>">
 										<div class="col-lg-10">
-											<input type="password" class="form-control floating-label" id="password" placeholder="Password">
+											<input type="password" name="password" class="form-control floating-label" id="password" placeholder="Password" required>
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-lg-10 col-lg-offset-6">
-											<button type="submit" class="btn btn-primary">Enter</button>
+											<button type="submit" class="btn <%= btnStyle %>">Enter</button>
 										</div>
 									</div>
 								</fieldset>
@@ -74,9 +112,10 @@
 
     <!-- Bootstrap core JavaScript placed at the end of the document so the pages load faster -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/ripples.min.js"></script>
-		<script src="js/material.min.js"></script>
+		<script src="${appRoot}/js/bootstrap.min.js"></script>
+		<script src="${appRoot}/js/ripples.min.js"></script>
+		<script src="${appRoot}/js/material.min.js"></script>
+		<script src="${appRoot}/js/validator.min.js"></script>
 		<script>
 			$(document).ready(function () {
 				// This command is used to initialize some elements and make them work properly

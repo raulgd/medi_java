@@ -4,10 +4,14 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import mx.jimi.medi.models.User;
 
 /**
- * The User Controller
+ * The User Session Bean Controller
  *
  * @author Raul Guerrero Deschamps
  */
@@ -15,14 +19,36 @@ import mx.jimi.medi.models.User;
 public class UserBean
 {
 
-	public User getMyUser()
+	//get the JPA entity Manager
+	@PersistenceContext(unitName ="MediPU")
+	EntityManager em;
+
+	/**
+	 * Checks a user's authentication credentials to access the system
+	 *
+	 * @param email the user's email
+	 * @param password the user's password
+	 *
+	 * @return the User entity if the credentials are correct, null if not authenticated correctly
+	 */
+	public User check(String email, String password)
 	{
-		return null;
+		try
+		{
+			Query q = em.createNamedQuery("User.find");
+			q.setParameter("email", email);
+			q.setParameter("password", hashPassword(password));
+			return (User) q.getSingleResult();
+		}
+		catch (NoSuchAlgorithmException | UnsupportedEncodingException | NoResultException ex)
+		{
+			return null;
+		}
 	}
 
 	/**
 	 * Hash the password using the SHA-512 algorithm
-	 * 
+	 *
 	 * @param passwd the password to hash
 	 * @return the hashed string representation of the password
 	 *

@@ -1,0 +1,28 @@
+<%@ page pageEncoding="UTF-8" %>
+<%
+	/*
+	 * Valid session checking
+	 */
+	boolean error = false;
+	if (request.getSession(false) == null)
+	{
+		//send to the login page and send session expired error
+		error = true;
+	}
+	else
+	{
+		if (session.getAttribute("user") == null)
+		{
+			//do a logout because of some session error
+			session.invalidate();
+			error = true;
+		}
+	}
+	if (error)
+	{
+		out.println("<HTML><HEAD><SCRIPT>window.top.location.href='"
+						+ getServletContext().getContextPath()
+						+ "/index.jsp?error=2';</SCRIPT></HEAD></HTML>");
+		return;
+	}
+%>

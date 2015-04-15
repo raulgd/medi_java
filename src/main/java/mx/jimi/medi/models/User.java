@@ -1,5 +1,6 @@
 package mx.jimi.medi.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -9,12 +10,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * The User entity
- * 
+ *
  * @author Raul Guerrero Deschamps
  */
 @Entity
@@ -22,15 +25,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries(
 {
-	@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
-	@NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-	@NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
-	@NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
+	//The preconfigured usual queries
+	@NamedQuery(name = "User.find", query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password")
 })
 public class User implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	// @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+
+	//the database mapping fields
+	@Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")
 	@Id
   @Basic(optional = false)
   @NotNull
@@ -84,6 +87,8 @@ public class User implements Serializable
 		this.name = name;
 	}
 
+	@JsonIgnore
+	@XmlTransient
 	public String getPassword()
 	{
 		return password;
@@ -105,7 +110,7 @@ public class User implements Serializable
 	@Override
 	public boolean equals(Object object)
 	{
-		// TODO: Warning - this method won't work in the case the id fields are not set
+		// Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof User))
 		{
 			return false;

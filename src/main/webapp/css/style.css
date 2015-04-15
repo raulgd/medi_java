@@ -22,6 +22,11 @@ body
 	color: #1caa98 !important;
 }
 
+.alert-login
+{
+	width: 87% !important;
+}
+
 .octocat
 {
 	width: 50px;

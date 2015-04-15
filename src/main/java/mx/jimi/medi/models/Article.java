@@ -1,5 +1,6 @@
 package mx.jimi.medi.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -26,50 +27,51 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "articles")
 @XmlRootElement
 @NamedQueries(
-{
-	@NamedQuery(name = "Article.findAll", query = "SELECT a FROM Article a"),
-	@NamedQuery(name = "Article.findByArticleId", query = "SELECT a FROM Article a WHERE a.articleId = :articleId"),
-	@NamedQuery(name = "Article.findByAmount", query = "SELECT a FROM Article a WHERE a.amount = :amount"),
-	@NamedQuery(name = "Article.findByName", query = "SELECT a FROM Article a WHERE a.name = :name"),
-	@NamedQuery(name = "Article.findByFormula", query = "SELECT a FROM Article a WHERE a.formula = :formula"),
-	@NamedQuery(name = "Article.findByVolume", query = "SELECT a FROM Article a WHERE a.volume = :volume")
-})
+				{
+					//The preconfigured usual queries
+					@NamedQuery(name = "Article.findByArticleId", query = "SELECT a FROM Article a WHERE a.articleId = :articleId"),
+					@NamedQuery(name = "Article.findBySearch", query = "SELECT a FROM Article a JOIN a.brandId b, a.usageId u "
+											+ "WHERE a.name LIKE :name OR a.formula LIKE :formula OR a.volume LIKE :volume OR b.name LIKE :brand OR u.name LIKE :usage")
+				})
 public class Article implements Serializable
 {
+
 	private static final long serialVersionUID = 1L;
+
+	//The database mapping fields
 	@Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Basic(optional = false)
-  @Column(name = "article_id", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Basic(optional = false)
+	@Column(name = "article_id", nullable = false)
 	private Long articleId;
 	@Basic(optional = false)
-  @NotNull
-  @Column(name = "amount", nullable = false)
+	@NotNull
+	@Column(name = "amount", nullable = false)
 	private int amount;
 	@Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 255)
-  @Column(name = "name", nullable = false, length = 255)
+	@NotNull
+	@Size(min = 1, max = 255)
+	@Column(name = "name", nullable = false, length = 255)
 	private String name;
 	@Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 255)
-  @Column(name = "formula", nullable = false, length = 255)
+	@NotNull
+	@Size(min = 1, max = 255)
+	@Column(name = "formula", nullable = false, length = 255)
 	private String formula;
 	@Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "volume", nullable = false, length = 50)
+	@NotNull
+	@Size(min = 1, max = 50)
+	@Column(name = "volume", nullable = false, length = 50)
 	private String volume;
 	@Lob
-  @Size(max = 65535)
-  @Column(name = "comments", length = 65535)
+	@Size(max = 65535)
+	@Column(name = "comments", length = 65535)
 	private String comments;
 	@JoinColumn(name = "brand_id", referencedColumnName = "brand_id", nullable = false)
-  @ManyToOne(optional = false)
+	@ManyToOne(optional = false)
 	private Brand brandId;
 	@JoinColumn(name = "usage_id", referencedColumnName = "usage_id", nullable = false)
-  @ManyToOne(optional = false)
+	@ManyToOne(optional = false)
 	private Usage usageId;
 
 	public Article()
@@ -90,11 +92,13 @@ public class Article implements Serializable
 		this.volume = volume;
 	}
 
+	@JsonProperty("article_id")
 	public Long getArticleId()
 	{
 		return articleId;
 	}
 
+	@JsonProperty("article_id")
 	public void setArticleId(Long articleId)
 	{
 		this.articleId = articleId;
@@ -150,21 +154,25 @@ public class Article implements Serializable
 		this.comments = comments;
 	}
 
+	@JsonProperty("brand_id")
 	public Brand getBrandId()
 	{
 		return brandId;
 	}
 
+	@JsonProperty("brand_id")
 	public void setBrandId(Brand brandId)
 	{
 		this.brandId = brandId;
 	}
 
+	@JsonProperty("usage_id")
 	public Usage getUsageId()
 	{
 		return usageId;
 	}
 
+	@JsonProperty("usage_id")
 	public void setUsageId(Usage usageId)
 	{
 		this.usageId = usageId;
@@ -181,7 +189,7 @@ public class Article implements Serializable
 	@Override
 	public boolean equals(Object object)
 	{
-		// TODO: Warning - this method won't work in the case the id fields are not set
+		//Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof Article))
 		{
 			return false;

@@ -1,25 +1,29 @@
 package mx.jimi.medi.views;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
+import javax.ws.rs.core.MediaType;
+import mx.jimi.medi.controllers.UserBean;
+import mx.jimi.medi.models.User;
 
 /**
- * REST Web Service
+ * The User REST Web Service
  *
- * @author jz2n4h
+ * @author Raul Guerrero Deschamps
  */
+@Stateless
 @Path("/user")
 public class UserResource
 {
 
-	@Context
-	private UriInfo context;
+	@EJB
+	private UserBean userBean;
 
 	/**
 	 * Creates a new instance of UsersResource
@@ -29,25 +33,21 @@ public class UserResource
 	}
 
 	/**
-	 * Retrieves representation of an instance of mx.jimi.medi.views.UserResource
-	 * @return an instance of java.lang.String
+	 * Get the authenticated user information
+	 *
+	 * @return a User entity
 	 */
 	@GET
-  @Produces("application/json")
-	public String getJson()
+	@Consumes(
+					{
+						MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML
+					})
+	@Produces(
+					{
+						MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML
+					})
+	public User getUser(@Context HttpServletRequest request)
 	{
-		//TODO return proper representation object
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * PUT method for updating or creating an instance of UserResource
-	 * @param content representation for the resource
-	 * @return an HTTP response with content of the updated or created resource.
-	 */
-	@PUT
-  @Consumes("application/json")
-	public void putJson(String content)
-	{
+		return (User) request.getAttribute("user");
 	}
 }

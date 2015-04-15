@@ -1,5 +1,7 @@
 package mx.jimi.medi.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -28,13 +30,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries(
 {
+	//The preconfigured usual queries
 	@NamedQuery(name = "Usage.findAll", query = "SELECT u FROM Usage u"),
 	@NamedQuery(name = "Usage.findByUsageId", query = "SELECT u FROM Usage u WHERE u.usageId = :usageId"),
-	@NamedQuery(name = "Usage.findByName", query = "SELECT u FROM Usage u WHERE u.name = :name")
 })
 public class Usage implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+
+	//the database mapping fields
 	@Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
@@ -63,11 +67,13 @@ public class Usage implements Serializable
 		this.name = name;
 	}
 
+	@JsonProperty("usage_id")
 	public Long getUsageId()
 	{
 		return usageId;
 	}
 
+	@JsonProperty("usage_id")
 	public void setUsageId(Long usageId)
 	{
 		this.usageId = usageId;
@@ -83,6 +89,7 @@ public class Usage implements Serializable
 		this.name = name;
 	}
 
+	@JsonIgnore
 	@XmlTransient
 	public List<Article> getArticleList()
 	{
@@ -105,7 +112,7 @@ public class Usage implements Serializable
 	@Override
 	public boolean equals(Object object)
 	{
-		// TODO: Warning - this method won't work in the case the id fields are not set
+		// Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof Usage))
 		{
 			return false;
