@@ -37,7 +37,7 @@ public class InventoryResource
 	}
 
 	/**
-	 * Add or remove the amount of articles in the inventory
+	 * Add the amount of articles in the inventory
 	 *
 	 * @param articleId the ID of the article to change the amount
 	 * @param amount the amount number
@@ -45,7 +45,7 @@ public class InventoryResource
 	 * @return the updated article, or null if it couldn't update it
 	 */
 	@GET
-	@Path("/{id}/amount={amount}")
+	@Path("/{id}/amount+{amount}")
 	@Consumes(
 					{
 						MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML
@@ -54,8 +54,31 @@ public class InventoryResource
 					{
 						MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML
 					})
-	public Article updateAmount(@PathParam("id") final long articleId, @PathParam("amount") final int amount)
+	public Article addAmount(@PathParam("id") final long articleId, @PathParam("amount") final int amount)
 	{
 		return inventoryBean.updateAmount(articleId, amount);
+	}
+
+	/**
+	 * Add or remove the amount of articles in the inventory
+	 *
+	 * @param articleId the ID of the article to change the amount
+	 * @param amount the amount number
+	 *
+	 * @return the updated article, or null if it couldn't update it
+	 */
+	@GET
+	@Path("/{id}/amount-{amount}")
+	@Consumes(
+					{
+						MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML
+					})
+	@Produces(
+					{
+						MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML
+					})
+	public Article substractAmount(@PathParam("id") final long articleId, @PathParam("amount") final int amount)
+	{
+		return inventoryBean.updateAmount(articleId, amount * -1);
 	}
 }

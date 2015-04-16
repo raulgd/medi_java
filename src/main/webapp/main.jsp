@@ -7,6 +7,10 @@
     <title>
 			Medi - The Medical Inventory Web Application
     </title>
+		<script>
+			//load the appRoot so the application can be released with any prefixed URL
+			var appRoot = '${appRoot}';
+		</script>
 		<link href="${appRoot}/css/bootstrap.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/roboto.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/material.min.css" rel="stylesheet">
@@ -27,9 +31,9 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#" data-toggle="modal" data-target="#articleModal">Add Article</a></li>
+            <li><a href="#" id="addArticleBtn" data-toggle="modal" data-target="#articleModal">Add Article</a></li>
 						<form class="navbar-form navbar-left">
-							<input type="text" class="form-control col-lg-8" placeholder="Search">
+							<input type="text" id="searchField" class="form-control col-lg-8" placeholder="Search">
 						</form>
           </ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -39,54 +43,11 @@
       </div>
     </nav>
 
-
-		<!-- The GitHub link -->
+		<!-- The inventory list -->
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="list-group" id="inventory-list">
-						<div class="list-group-item">
-							<div class="row-content">
-								<div class="least-content">
-									25 items<br/>
-									<div class="icon-preview">
-										<a href="#" data-toggle="modal" data-target="#addAmountModal"><i class="mdi-content-add"></i></a>&nbsp;&nbsp;
-										<a href="#" data-toggle="modal" data-target="#removeAmountModal"><i class="mdi-content-remove"></i></a>
-									</div>
-								</div>
-								<h4 class="list-group-item-heading"><a href="#" data-toggle="modal" data-target="#articleModal">Tile with a label</a></h4>
-								<p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus.</p>
-							</div>
-						</div>
-						<div class="list-group-separator-full"></div>
-						<div class="list-group-item">
-							<div class="row-content">
-								<div class="least-content">
-									25 items<br/>
-									<div class="icon-preview">
-										<a href="#" data-toggle="modal" data-target="#addAmountModal"><i class="mdi-content-add"></i></a>&nbsp;&nbsp;
-										<a href="#" data-toggle="modal" data-target="#removeAmountModal"><i class="mdi-content-remove"></i></a>
-									</div>
-								</div>
-								<h4 class="list-group-item-heading"><a href="#" data-toggle="modal" data-target="#articleModal">Tile with a label</a></h4>
-								<p class="list-group-item-text">Maecenas sed diam eget risus varius blandit.</p>
-							</div>
-						</div>
-						<div class="list-group-separator-full"></div>
-						<div class="list-group-item">
-							<div class="row-content">
-								<div class="least-content">
-									25 items<br/>
-									<div class="icon-preview">
-										<a href="#" data-toggle="modal" data-target="#addAmountModal"><i class="mdi-content-add"></i></a>&nbsp;&nbsp;
-										<a href="#" data-toggle="modal" data-target="#removeAmountModal"><i class="mdi-content-remove"></i></a>
-									</div>
-								</div>
-								<h4 class="list-group-item-heading"><a href="#" data-toggle="modal" data-target="#articleModal">Tile with a label</a></h4>
-								<p class="list-group-item-text">Maecenas sed diam eget risus varius blandit.</p>
-							</div>
-						</div>
-						<div class="list-group-separator-full"></div>
 					</div>
 				</div>
 			</div>
@@ -97,7 +58,6 @@
 			<div class="modal-dialog">
         <div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 						<h4 class="modal-title">Save an article</h4>
 					</div>
 					<div class="modal-body">
@@ -114,6 +74,12 @@
 									<label for="formula" class="col-lg-2 control-label">Formula</label>
 									<div class="col-lg-10">
 										<input type="text" class="form-control" id="formula" placeholder="Formula">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="volume" class="col-lg-2 control-label">Volume</label>
+									<div class="col-lg-10">
+										<input type="text" class="form-control" id="volume" placeholder="Volume">
 									</div>
 								</div>
 								<div class="form-group">
@@ -141,12 +107,6 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="volume" class="col-lg-2 control-label">Volume</label>
-									<div class="col-lg-10">
-										<input type="text" class="form-control" id="volume" placeholder="Volume">
-									</div>
-								</div>
-								<div class="form-group">
 									<label for="comments" class="col-lg-2 control-label">Comments</label>
 									<div class="col-lg-10">
 										<textarea class="form-control" rows="7" id="comments"></textarea>
@@ -156,8 +116,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" id="closeArticle">Close</button>
+						<button type="button" class="btn btn-primary" id="saveArticle">Save</button>
 					</div>
         </div>
 			</div>
@@ -168,7 +128,6 @@
 			<div class="modal-dialog">
         <div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 						<h4 class="modal-title">Add articles to inventory</h4>
 					</div>
 					<div class="modal-body">
@@ -178,15 +137,15 @@
 								<div class="form-group">
 									<label for="add-amount" class="col-lg-2 control-label">Amount</label>
 									<div class="col-lg-10">
-										<input type="text" class="form-control" id="add-amount" placeholder="Amount">
+										<input type="text" class="form-control" id="amountAdd" placeholder="Amount">
 									</div>
 								</div>
 							</fieldset>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save</button>
+						<button type="button" id="addAmountClose" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" id="addAmountSave" class="btn btn-primary">Save</button>
 					</div>
         </div>
 			</div>
@@ -197,7 +156,6 @@
 			<div class="modal-dialog">
         <div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 						<h4 class="modal-title">Remove articles from inventory</h4>
 					</div>
 					<div class="modal-body">
@@ -207,15 +165,15 @@
 								<div class="form-group">
 									<label for="remove-amount" class="col-lg-2 control-label">Amount</label>
 									<div class="col-lg-10">
-										<input type="text" class="form-control" id="remove-amount" placeholder="Amount">
+										<input type="text" class="form-control" id="amountRemove" placeholder="Amount">
 									</div>
 								</div>
 							</fieldset>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save</button>
+						<button type="button" id="removeAmountClose" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" id="removeAmountSave" class="btn btn-primary">Save</button>
 					</div>
         </div>
 			</div>
@@ -227,11 +185,12 @@
 		<script src="${appRoot}/js/ripples.min.js"></script>
 		<script src="${appRoot}/js/material.min.js"></script>
 		<script src="${appRoot}/js/validator.min.js"></script>
-		<script>
-			$(document).ready(function () {
-				// This command is used to initialize some elements and make them work properly
-				$.material.init();
-			});
-		</script>
+
+		<!-- All the needed Medi scripts -->
+		<script src="${appRoot}/js/rest/articles.js"></script>
+		<script src="${appRoot}/js/rest/inventory.js"></script>
+		<script src="${appRoot}/js/rest/user.js"></script>
+		<script src="${appRoot}/js/main.js"></script>
+
 	</body>
 </html>
