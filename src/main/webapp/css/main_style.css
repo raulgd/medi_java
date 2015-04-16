@@ -53,3 +53,8 @@ a:focus {
 {
 	width:350px;
 }
+
+.floating-label
+{
+	color: white !important;
+}

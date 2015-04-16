@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import mx.jimi.medi.controllers.ArticleBean;
 import mx.jimi.medi.models.Article;
+import mx.jimi.medi.views.exceptions.WebException;
 
 /**
  * The Articles REST Web Service
@@ -72,9 +73,16 @@ public class ArticlesResource
 					{
 						MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML
 					})
-	public Article get(@PathParam("id") final long articleId)
+	public Article get(@PathParam("id") final long articleId) throws WebException
 	{
-		return articleBean.get(articleId);
+		try
+		{
+			return articleBean.get(articleId);
+		}
+		catch (Exception ex)
+		{
+			throw (WebException) ex.getCause().getCause();
+		}
 	}
 
 	/**

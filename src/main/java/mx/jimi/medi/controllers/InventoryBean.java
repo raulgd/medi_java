@@ -2,6 +2,7 @@ package mx.jimi.medi.controllers;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ws.rs.core.Response.Status;
 import mx.jimi.medi.models.Article;
 import mx.jimi.medi.views.exceptions.WebException;
 
@@ -25,7 +26,7 @@ public class InventoryBean
 	 *
 	 * @return the updated article, or null if it couldn't update it
 	 */
-	public Article updateAmount(final long articleId, final int amount)
+	public Article updateAmount(final long articleId, final int amount) throws WebException
 	{
 		Article a = articleBean.get(articleId);
 
@@ -40,12 +41,12 @@ public class InventoryBean
 			}
 			else
 			{
-				throw new WebException("Cannot remove more articles than in existence");
+				throw new WebException(Status.NOT_ACCEPTABLE, "Cannot remove more articles than in existence");
 			}
 		}
 		else
 		{
-			throw new WebException("The article doesn't exist");
+			throw new WebException(Status.NOT_FOUND, "The article doesn't exist");
 		}
 		return a;
 	}

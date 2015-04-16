@@ -31,9 +31,9 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#" id="addArticleBtn" data-toggle="modal" data-target="#articleModal">Add Article</a></li>
+            <li><a href="#" id="addArticleBtn">Add Article</a></li>
 						<form class="navbar-form navbar-left">
-							<input type="text" id="searchField" class="form-control col-lg-8" placeholder="Search">
+							<input type="text" id="searchField" class="form-control col-lg-8 floating-label" placeholder="Search">
 						</form>
           </ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -42,6 +42,19 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+
+		<!-- The alert  -->
+		<div class="container collapse" id="medi-alert">
+			<div class="row">
+				<div class="col-md-1 col-md-offset-3"></div>
+				<div class="col-md-4 col-sm-12 col-md-offset-3 center-block">
+					<div class="alert alert-dismissable alert-danger" >
+						<button type="button" class="close" id="medi-alert-close">×</button>
+						<div id="medi-alert-text"><strong>some text</strong></div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!-- The inventory list -->
 		<div class="container">
@@ -87,10 +100,6 @@
 									<div class="col-lg-10">
 										<select class="form-control" id="brand">
 											<option selected>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
 										</select>
 									</div>
 								</div>
@@ -99,10 +108,6 @@
 									<div class="col-lg-10">
 										<select class="form-control" id="usage">
 											<option selected>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
 										</select>
 									</div>
 								</div>
@@ -116,8 +121,12 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal" id="closeArticle">Close</button>
+						<button type="button" class="btn btn-default" id="closeArticle">Close</button>
 						<button type="button" class="btn btn-primary" id="saveArticle">Save</button>
+					</div>
+					<div class="alert alert-dismissable alert-danger collapse" id="article-alert">
+						<button type="button" class="close" id="article-alert-close">×</button>
+						<div id="article-alert-text"><strong>some text</strong></div>
 					</div>
         </div>
 			</div>
@@ -144,8 +153,12 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="addAmountClose" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" id="addAmountClose" class="btn btn-default">Close</button>
 						<button type="button" id="addAmountSave" class="btn btn-primary">Save</button>
+					</div>
+					<div class="alert alert-dismissable alert-danger collapse" id="addamount-alert">
+						<button type="button" class="close" id="addamount-alert-close">×</button>
+						<div id="addamount-alert-text"><strong>some text</strong></div>
 					</div>
         </div>
 			</div>
@@ -172,8 +185,12 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="removeAmountClose" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" id="removeAmountClose" class="btn btn-default">Close</button>
 						<button type="button" id="removeAmountSave" class="btn btn-primary">Save</button>
+					</div>
+					<div class="alert alert-dismissable alert-danger collapse" id="removeamount-alert">
+						<button type="button" class="close" id="removeamount-alert-close">×</button>
+						<div id="removeamount-alert-text"><strong>some text</strong></div>
 					</div>
         </div>
 			</div>

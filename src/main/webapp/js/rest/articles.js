@@ -84,7 +84,8 @@ var articleController =
 											"url": appRoot + "/rest/articles",
 											"type": "POST",
 											"dataType": "json",
-											"data": article,
+											"contentType": "application/json",
+											"data": JSON.stringify(article),
 											"success": function (obj)
 											{
 												successCallback(obj);
@@ -111,7 +112,8 @@ var articleController =
 											"url": appRoot + "/rest/articles/" + id,
 											"type": "PUT",
 											"dataType": "json",
-											"data": article,
+											"contentType": "application/json",
+											"data": JSON.stringify(article),
 											"success": function (obj)
 											{
 												successCallback(obj);

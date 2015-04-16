@@ -13,7 +13,24 @@ $(document).ready(function ()
 	// This command is used to initialize some elements and make them work properly
 	$.material.init();
 
-	//fetch all articles and load them in the articles list
+	//alert toggles
+	$('#medi-alert-close').click(function ()
+	{
+		$('#medi-alert').addClass('collapse');
+	});
+	$('#article-alert-close').click(function ()
+	{
+		$('#article-alert').addClass('collapse');
+	});
+	$('#addamount-alert-close').click(function ()
+	{
+		$('#addamount-alert').addClass('collapse');
+	});
+	$('#removeamount-alert-close').click(function ()
+	{
+		$('#removeamount-alert').addClass('collapse');
+	});
+
 	//call the search service and load the article list
 	articleController.search('', function ()
 	{
@@ -22,19 +39,7 @@ $(document).ready(function ()
 		for (var i in articleController.articles)
 		{
 			a = articleController.articles[i];
-			amounts = "";
-			if (a.amount === 0)
-			{
-				amounts = "0 items";
-			}
-			else if (a.amount === 1)
-			{
-				amounts = "1 item";
-			}
-			else
-			{
-				amounts = a.amount + " items";
-			}
+			amounts = amount_suffix(a.amount);
 			comments = "";
 			if (a.comments !== null)
 			{
@@ -43,8 +48,7 @@ $(document).ready(function ()
 			articleItem =
 							'<div class="list-group-item" id="article-' + a.article_id + '">'
 							+ '<div class="row-content">'
-							+ '<div class="least-content" id="article-amount-' + a.article_id + '">'
-							+ amounts + '<br/>'
+							+ '<div class="least-content" id="article-amount-' + a.article_id + '">' + amounts + '<br/>'
 							+ '<div class="icon-preview">'
 							+ '<a href="#" data-toggle="modal" data-target="#addAmountModal" onClick="amount_add(' + a.article_id + ')"><i class="mdi-content-add"></i></a> &nbsp; &nbsp;'
 							+ '<a href="#" data-toggle="modal" data-target="#removeAmountModal" onClick="amount_remove(' + a.article_id + ')"><i class="mdi-content-remove"></i></a>'
@@ -61,11 +65,29 @@ $(document).ready(function ()
 		$("#inventory-list").replaceWith(articleList);
 	}, function (xhr, status, errorThrown)
 	{
-		//on error
-		$("#error-content").text(errorThrown);
-		$("#error-panel").show();
+		$('#medi-alert-text').text(xhr.responseJSON.error);
+		$('#medi-alert').removeClass('collapse');
 	});
 });
+
+//set the amount suffix of item or items
+function amount_suffix(amount)
+{
+	amounts = "";
+	if (amount == 0)
+	{
+		amounts = "0 items";
+	}
+	else if (amount == 1)
+	{
+		amounts = "1 item";
+	}
+	else
+	{
+		amounts = amount + " items";
+	}
+	return amounts;
+}
 
 /*************************************************
  * On Search
@@ -77,10 +99,7 @@ $("#searchField").keydown(function (e)
 		e.preventDefault();
 
 		//remove all articles from the list
-		for (var i in articleController.articles)
-		{
-			$("#article-" + i.article_id).remove();
-		}
+		$('#inventory-list').replaceWith('<div class="list-group" id="inventory-list"></div>');
 
 		//call the search service and load the article list
 		articleController.search($("#searchField").val(), function ()
@@ -90,19 +109,7 @@ $("#searchField").keydown(function (e)
 			for (var i in articleController.articles)
 			{
 				a = articleController.articles[i];
-				amounts = "";
-				if (a.amount === 0)
-				{
-					amounts = "0 items";
-				}
-				else if (a.amount === 1)
-				{
-					amounts = "1 item";
-				}
-				else
-				{
-					amounts = a.amount + " items";
-				}
+				amounts = amount_suffix(a.amount);
 				comments = "";
 				if (a.comments !== null)
 				{
@@ -111,8 +118,7 @@ $("#searchField").keydown(function (e)
 				articleItem =
 								'<div class="list-group-item" id="article-' + a.article_id + '">'
 								+ '<div class="row-content">'
-								+ '<div class="least-content" id="article-amount-' + a.article_id + '">'
-								+ amounts + '<br/>'
+								+ '<div class="least-content" id="article-amount-' + a.article_id + '">' + amounts + '<br/>'
 								+ '<div class="icon-preview">'
 								+ '<a href="#" data-toggle="modal" data-target="#addAmountModal" onClick="amount_add(' + a.article_id + ')"><i class="mdi-content-add"></i></a> &nbsp; &nbsp;'
 								+ '<a href="#" data-toggle="modal" data-target="#removeAmountModal" onClick="amount_remove(' + a.article_id + ')"><i class="mdi-content-remove"></i></a>'
@@ -129,9 +135,8 @@ $("#searchField").keydown(function (e)
 			$("#inventory-list").replaceWith(articleList);
 		}, function (xhr, status, errorThrown)
 		{
-			//on error
-			$("#error-content").text(errorThrown);
-			$("#error-panel").show();
+			$('#medi-alert-text').text(xhr.responseJSON.error);
+			$('#medi-alert').removeClass('collapse');
 		});
 
 		return false;
@@ -139,18 +144,118 @@ $("#searchField").keydown(function (e)
 });
 
 /*************************************************
+ * Clear the article form
+ *************************************************/
+function clear_article_form()
+{
+	$('#name').val('');
+	$('#formula').val('');
+	$('#volume').val('');
+	$('#brand').replaceWith('<select class="form-control" id="brand"><option value="" selected></option></select>');
+	$('#usage').replaceWith('<select class="form-control" id="usage"><option value="" selected></option></select>');
+	$('#comments').val('');
+	$('#article-alert').addClass('collapse');
+}
+
+/*************************************************
+ * Load brands and usages into the form
+ *************************************************/
+function load_brands(selected)
+{
+	//clear the select
+	$('#brand').replaceWith('<select class="form-control" id="brand"><option value="" selected></option></select>');
+
+	//load the brands into the select
+	articleController.getBrands(function ()
+	{
+		brandSelect = '<select class="form-control" id="brand">';
+		for (var i in articleController.brands)
+		{
+			b = articleController.brands[i];
+			sel = "";
+			if (selected.brand_id === b.brand_id)
+			{
+				sel = "selected";
+			}
+			brandSelect += '<option value="' + b.brand_id + '" ' + sel + '>' + b.name + '</option>';
+		}
+		brandSelect += '</select>';
+		$('#brand').replaceWith(brandSelect);
+	}, function (xhr, status, errorThrown)
+	{
+		$('#article-alert-text').text(xhr.responseJSON.error);
+		$('#article-alert').removeClass('collapse');
+	});
+}
+
+function load_usages(selected)
+{
+	//clear the select
+	$('#usage').replaceWith('<select class="form-control" id="usage"><option value="" selected></option></select>');
+
+	articleController.getUsages(function ()
+	{
+		usageSelect = '<select class="form-control" id="usage">';
+		for (var i in articleController.usages)
+		{
+			u = articleController.usages[i];
+			sel = "";
+			if (selected.usage_id === u.usage_id)
+			{
+				sel = "selected";
+			}
+			usageSelect += '<option value="' + u.usage_id + '" ' + sel + '>' + u.name + '</option>';
+		}
+		usageSelect += '</select>';
+		$('#usage').replaceWith(usageSelect);
+	}, function (xhr, status, errorThrown)
+	{
+		$('#article-alert-text').text(xhr.responseJSON.error);
+		$('#article-alert').removeClass('collapse');
+	});
+}
+
+/*************************************************
  * On add Article button click
  *************************************************/
 $("#addArticleBtn").click(function ()
 {
+	//clear the form
+	clear_article_form();
 
+	//load brands and usages
+	load_brands(0);
+	load_usages(0);
+
+	//show the form
+	$('#articleModal').modal('show');
 });
+
 /*************************************************
  * On article title click
  *************************************************/
 function article_edit(article_id)
 {
+	articleController.get(article_id, function (obj)
+	{
+		//clear the form
+		clear_article_form();
 
+		articleController.selectedArticle = obj;
+		$('#name').val(obj.name);
+		$('#formula').val(obj.formula);
+		$('#volume').val(obj.volume);
+		load_brands(obj.brand_id);
+		load_usages(obj.usage_id);
+		$('#comments').val(obj.comments);
+
+		//show the form
+		$('#articleModal').modal('show');
+	}, function (xhr, status, errorThrown)
+	{
+		$('#article-alert-text').text(xhr.responseJSON.error);
+		$('#article-alert').removeClass('collapse');
+	});
 }
 
 /*************************************************
@@ -158,18 +263,129 @@ function article_edit(article_id)
  *************************************************/
 $("#saveArticle").click(function ()
 {
+	//if selected article is null, then create
+	if (articleController.selectedArticle === null)
+	{
+		var article =
+						{
+							"amount": 0,
+							"name": $('#name').val(),
+							"formula": $('#formula').val(),
+							"volume": $('#volume').val(),
+							"comments": $('#comments').val(),
+							"brand_id": null,
+							"usage_id": null
+						};
+		selectedBrand = $('#brand').val();
+		selectedUsage = $('#usage').val();
 
+		for (var i in articleController.brands)
+		{
+			a = articleController.brands[i];
+			if (selectedBrand == a.brand_id)
+			{
+				article.brand_id = a;
+				break;
+			}
+		}
+		for (var i in articleController.usages)
+		{
+			u = articleController.usages[i];
+			if (selectedUsage === a.usage_id)
+			{
+				article.usage_id = u;
+				break;
+			}
+		}
+
+		articleController.create(article, function ()
+		{
+			$('#articleModal').modal('hide');
+		}, function (xhr, status, errorThrown)
+		{
+			$('#article-alert-text').text(xhr.responseJSON.error);
+			$('#article-alert').removeClass('collapse');
+		});
+	}
+	//if selected article present, then edit
+	else
+	{
+		article = articleController.selectedArticle;
+		article.name = $('#name').val();
+		article.formula = $('#formula').val();
+		article.volume = $('#volume').val();
+		article.comments = $('#comments').val();
+
+		selectedBrand = $('#brand').val();
+		selectedUsage = $('#usage').val();
+
+		for (var i in articleController.brands)
+		{
+			a = articleController.brands[i];
+			if (selectedBrand == a.brand_id)
+			{
+				article.brand_id = a;
+				break;
+			}
+		}
+		for (var i in articleController.usages)
+		{
+			u = articleController.usages[i];
+			if (selectedUsage == u.usage_id)
+			{
+				article.usage_id = u;
+				break;
+			}
+		}
+
+		articleController.edit(article.article_id, article, function (obj)
+		{
+			$('#articleModal').modal('hide');
+			amounts = amount_suffix(obj.amount);
+			articleItem =
+							'<div class="list-group-item" id="article-' + obj.article_id + '">'
+							+ '<div class="row-content">'
+							+ '<div class="least-content" id="article-amount-' + obj.article_id + '">' + amounts + '<br/>'
+							+ '<div class="icon-preview">'
+							+ '<a href="#" data-toggle="modal" data-target="#addAmountModal" onClick="amount_add(' + obj.article_id + ')"><i class="mdi-content-add"></i></a> &nbsp; &nbsp;'
+							+ '<a href="#" data-toggle="modal" data-target="#removeAmountModal" onClick="amount_remove(' + obj.article_id + ')"><i class="mdi-content-remove"></i></a>'
+							+ '</div>'
+							+ '</div>'
+							+ '<h4 class="list-group-item-heading"><a href="#" data-toggle="modal" data-target="#articleModal" id="article-title-' + obj.article_id + '" onClick="article_edit(' + obj.article_id + ')"> ' + obj.name + ' </a></h4>'
+							+ '<p class="list-group-item-text" id="article-content-' + obj.article_id + '">' + obj.formula + ' ' + obj.volume + '<br/>Usage: ' + obj.usage_id.name + '<br/>By ' + obj.brand_id.name + ' <br/> ' + obj.comments + ' </p>'
+							+ '</div>'
+							+ '<div class="list-group-separator-full"></div>'
+							+ '</div>';
+			$('#article-' + obj.article_id).replaceWith(articleItem);
+		}, function (xhr, status, errorThrown)
+		{
+			$('#article-alert-text').text(xhr.responseJSON.error);
+			$('#article-alert').removeClass('collapse');
+		});
+	}
 });
+
 $("#closeArticle").click(function ()
 {
-
+	articleController.selectedArticle = null;
+	$('#articleModal').modal('hide');
+	clear_article_form();
 });
+
 /*************************************************
  * On add amount icon click
  *************************************************/
 function amount_add(article_id)
 {
-
+	articleController.get(article_id, function (obj)
+	{
+		articleController.selectedArticle = obj;
+		$('#addAmountModal').modal('show');
+	}, function (xhr, status, errorThrown)
+	{
+		$('#addamount-alert-text').text(xhr.responseJSON.error);
+		$('#addamount-alert').removeClass('collapse');
+	});
 }
 
 /*************************************************
@@ -177,18 +393,46 @@ function amount_add(article_id)
  *************************************************/
 $("#addAmountSave").click(function ()
 {
-
+	inventoryController.add(articleController.selectedArticle.article_id, $('#amountAdd').val(), function (obj)
+	{
+		amounts = amount_suffix(obj.amount);
+		article_amount = '<div class="least-content" id="article-amount-' + obj.article_id + '">' + amounts + '<br/>'
+						+ '<div class="icon-preview">'
+						+ '<a href="#" data-toggle="modal" data-target="#addAmountModal" onClick="amount_add(' + obj.article_id + ')"><i class="mdi-content-add"></i></a> &nbsp; &nbsp;'
+						+ '<a href="#" data-toggle="modal" data-target="#removeAmountModal" onClick="amount_remove(' + obj.article_id + ')"><i class="mdi-content-remove"></i></a>'
+						+ '</div>'
+						+ '</div>';
+		$('#article-amount-' + obj.article_id).replaceWith(article_amount);
+		$('#addAmountModal').modal('hide');
+	}, function (xhr, status, errorThrown)
+	{
+		$('#addamount-alert-text').text(xhr.responseJSON.error);
+		$('#addamount-alert').removeClass('collapse');
+	});
 });
+
 $("#addAmountClose").click(function ()
 {
-
+	articleController.selectedArticle = null;
+	$('#addAmountModal').modal('hide');
+	$('#amountAdd').val('');
+	$('#addamount-alert').addClass('collapse');
 });
+
 /*************************************************
  * On remove amount icon click
  *************************************************/
 function amount_remove(article_id)
 {
-
+	articleController.get(article_id, function (obj)
+	{
+		articleController.selectedArticle = obj;
+		$('#removeAmountModal').modal('show');
+	}, function (xhr, status, errorThrown)
+	{
+		$('#removeamount-alert-text').text(xhr.responseJSON.error);
+		$('#removeamount-alert').removeClass('collapse');
+	});
 }
 
 /*************************************************
@@ -196,9 +440,28 @@ function amount_remove(article_id)
  *************************************************/
 $("#removeAmountSave").click(function ()
 {
-
+	inventoryController.substract(articleController.selectedArticle.article_id, $('#amountRemove').val(), function (obj)
+	{
+		amounts = amount_suffix(obj.amount);
+		article_amount = '<div class="least-content" id="article-amount-' + obj.article_id + '">' + amounts + '<br/>'
+						+ '<div class="icon-preview">'
+						+ '<a href="#" data-toggle="modal" data-target="#addAmountModal" onClick="amount_add(' + obj.article_id + ')"><i class="mdi-content-add"></i></a> &nbsp; &nbsp;'
+						+ '<a href="#" data-toggle="modal" data-target="#removeAmountModal" onClick="amount_remove(' + obj.article_id + ')"><i class="mdi-content-remove"></i></a>'
+						+ '</div>'
+						+ '</div>';
+		$('#article-amount-' + obj.article_id).replaceWith(article_amount);
+		$('#removeAmountModal').modal('hide');
+	}, function (xhr, status, errorThrown)
+	{
+		$('#removeamount-alert-text').text(xhr.responseJSON.error);
+		$('#removeamount-alert').removeClass('collapse');
+	});
 });
+
 $("#removeAmountClose").click(function ()
 {
-
+	articleController.selectedArticle = null;
+	$('#removeAmountModal').modal('hide');
+	$('#amountRemove').val('');
+	$('#removeamount-alert').addClass('collapse');
 });

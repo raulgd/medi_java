@@ -10,8 +10,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import mx.jimi.medi.controllers.InventoryBean;
 import mx.jimi.medi.models.Article;
+import mx.jimi.medi.views.exceptions.WebException;
 
 /**
  * The Inventory REST Web Service
@@ -56,6 +58,10 @@ public class InventoryResource
 					})
 	public Article addAmount(@PathParam("id") final long articleId, @PathParam("amount") final int amount)
 	{
+		if (amount < 1)
+		{
+			throw new WebException(Response.Status.NOT_ACCEPTABLE, "The amount cannot be zero or less");
+		}
 		return inventoryBean.updateAmount(articleId, amount);
 	}
 
@@ -78,7 +84,20 @@ public class InventoryResource
 						MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML
 					})
 	public Article substractAmount(@PathParam("id") final long articleId, @PathParam("amount") final int amount)
+					throws WebException
 	{
-		return inventoryBean.updateAmount(articleId, amount * -1);
+		if (amount < 1)
+		{
+			throw new WebException(Response.Status.NOT_ACCEPTABLE, "The amount cannot be zero or less");
+		}
+		try
+		{
+			Article a = inventoryBean.updateAmount(articleId, amount * -1);
+			return a;
+		}
+		catch (Exception ex)
+		{
+			throw (WebException) ex.getCause().getCause();
+		}
 	}
 }

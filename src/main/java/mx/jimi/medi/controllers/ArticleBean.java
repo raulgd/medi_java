@@ -6,7 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.core.Response;
 import mx.jimi.medi.models.Article;
+import mx.jimi.medi.views.exceptions.WebException;
 
 /**
  * The Article Session Bean Controller
@@ -45,7 +47,7 @@ public class ArticleBean
 	 * @param articleId the article entity's ID
 	 * @return an Article entity
 	 */
-	public Article get(final long articleId)
+	public Article get(final long articleId) throws WebException
 	{
 		try
 		{
@@ -55,7 +57,7 @@ public class ArticleBean
 		}
 		catch (NoResultException ex)
 		{
-			return null;
+			throw new WebException(Response.Status.NOT_FOUND, "The article doesn't exist");
 		}
 	}
 
