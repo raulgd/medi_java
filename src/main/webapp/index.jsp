@@ -105,7 +105,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 col-md-offset-1">
-					<h1>Get the source code of this demo at GitHub <a href="https://github.com/raulgd/medi" target="_blank"><img class="octocat" src="img/githublogo.png" /></a></h1>
+					<h1>Get the source code of this demo at GitHub <a href="https://github.com/raulgd/medi_java" target="_blank"><img class="octocat" src="img/githublogo.png" /></a></h1>
 				</div>
 			</div>
 		</div>
