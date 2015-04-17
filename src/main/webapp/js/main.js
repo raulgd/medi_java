@@ -65,7 +65,14 @@ $(document).ready(function ()
 		$("#inventory-list").replaceWith(articleList);
 	}, function (xhr, status, errorThrown)
 	{
-		$('#medi-alert-text').text(xhr.responseJSON.error);
+		if (xhr.responseJSON.error == undefined)
+		{
+			$('#medi-alert-text').text('There was an error loading the article list');
+		}
+		else
+		{
+			$('#medi-alert-text').text(xhr.responseJSON.error);
+		}
 		$('#medi-alert').removeClass('collapse');
 	});
 });
@@ -135,7 +142,14 @@ $("#searchField").keydown(function (e)
 			$("#inventory-list").replaceWith(articleList);
 		}, function (xhr, status, errorThrown)
 		{
-			$('#medi-alert-text').text(xhr.responseJSON.error);
+			if (xhr.responseJSON.error == undefined)
+			{
+				$('#medi-alert-text').text('There was an error loading the article list');
+			}
+			else
+			{
+				$('#medi-alert-text').text(xhr.responseJSON.error);
+			}
 			$('#medi-alert').removeClass('collapse');
 		});
 
@@ -172,18 +186,28 @@ function load_brands(selected)
 		for (var i in articleController.brands)
 		{
 			b = articleController.brands[i];
-			sel = "";
-			if (selected.brand_id === b.brand_id)
-			{
-				sel = "selected";
-			}
-			brandSelect += '<option value="' + b.brand_id + '" ' + sel + '>' + b.name + '</option>';
+			brandSelect += '<option value="' + b.brand_id + '">' + b.name + '</option>';
 		}
 		brandSelect += '</select>';
 		$('#brand').replaceWith(brandSelect);
+		if (selected == 0)
+		{
+			$('#brand').val('1');
+		}
+		else
+		{
+			$('#brand').val(selected.brand_id);
+		}
 	}, function (xhr, status, errorThrown)
 	{
-		$('#article-alert-text').text(xhr.responseJSON.error);
+		if (xhr.responseJSON.error == undefined)
+		{
+			$('#article-alert-text').text('There was an error loading the brands');
+		}
+		else
+		{
+			$('#article-alert-text').text(xhr.responseJSON.error);
+		}
 		$('#article-alert').removeClass('collapse');
 	});
 }
@@ -199,18 +223,28 @@ function load_usages(selected)
 		for (var i in articleController.usages)
 		{
 			u = articleController.usages[i];
-			sel = "";
-			if (selected.usage_id === u.usage_id)
-			{
-				sel = "selected";
-			}
-			usageSelect += '<option value="' + u.usage_id + '" ' + sel + '>' + u.name + '</option>';
+			usageSelect += '<option value="' + u.usage_id + '">' + u.name + '</option>';
 		}
 		usageSelect += '</select>';
 		$('#usage').replaceWith(usageSelect);
+		if (selected == 0)
+		{
+			$('#usage').val('1');
+		}
+		else
+		{
+			$('#usage').val(selected.usage_id);
+		}
 	}, function (xhr, status, errorThrown)
 	{
-		$('#article-alert-text').text(xhr.responseJSON.error);
+		if (xhr.responseJSON.error == undefined)
+		{
+			$('#article-alert-text').text('There was an error loading the usages');
+		}
+		else
+		{
+			$('#article-alert-text').text(xhr.responseJSON.error);
+		}
 		$('#article-alert').removeClass('collapse');
 	});
 }
@@ -253,7 +287,14 @@ function article_edit(article_id)
 		$('#articleModal').modal('show');
 	}, function (xhr, status, errorThrown)
 	{
-		$('#article-alert-text').text(xhr.responseJSON.error);
+		if (xhr.responseJSON.error == undefined)
+		{
+			$('#article-alert-text').text('There was an error loading the article data');
+		}
+		else
+		{
+			$('#article-alert-text').text(xhr.responseJSON.error);
+		}
 		$('#article-alert').removeClass('collapse');
 	});
 }
@@ -291,7 +332,7 @@ $("#saveArticle").click(function ()
 		for (var i in articleController.usages)
 		{
 			u = articleController.usages[i];
-			if (selectedUsage === a.usage_id)
+			if (selectedUsage == u.usage_id)
 			{
 				article.usage_id = u;
 				break;
@@ -303,7 +344,14 @@ $("#saveArticle").click(function ()
 			$('#articleModal').modal('hide');
 		}, function (xhr, status, errorThrown)
 		{
-			$('#article-alert-text').text(xhr.responseJSON.error);
+			if (xhr.responseJSON.error == undefined)
+			{
+				$('#article-alert-text').text('There was an error saving the article');
+			}
+			else
+			{
+				$('#article-alert-text').text(xhr.responseJSON.error);
+			}
 			$('#article-alert').removeClass('collapse');
 		});
 	}
@@ -359,10 +407,18 @@ $("#saveArticle").click(function ()
 			$('#article-' + obj.article_id).replaceWith(articleItem);
 		}, function (xhr, status, errorThrown)
 		{
-			$('#article-alert-text').text(xhr.responseJSON.error);
+			if (xhr.responseJSON.error == undefined)
+			{
+				$('#article-alert-text').text('There was an error saving the article');
+			}
+			else
+			{
+				$('#article-alert-text').text(xhr.responseJSON.error);
+			}
 			$('#article-alert').removeClass('collapse');
 		});
 	}
+	return false;
 });
 
 $("#closeArticle").click(function ()
@@ -383,7 +439,14 @@ function amount_add(article_id)
 		$('#addAmountModal').modal('show');
 	}, function (xhr, status, errorThrown)
 	{
-		$('#addamount-alert-text').text(xhr.responseJSON.error);
+		if (xhr.responseJSON.error == undefined)
+		{
+			$('#addamount-alert-text').text('There was an error loading the article amount');
+		}
+		else
+		{
+			$('#addamount-alert-text').text(xhr.responseJSON.error);
+		}
 		$('#addamount-alert').removeClass('collapse');
 	});
 }
@@ -406,9 +469,17 @@ $("#addAmountSave").click(function ()
 		$('#addAmountModal').modal('hide');
 	}, function (xhr, status, errorThrown)
 	{
-		$('#addamount-alert-text').text(xhr.responseJSON.error);
+		if (xhr.responseJSON.error == undefined)
+		{
+			$('#addamount-alert-text').text('There was an error incrementing the amount');
+		}
+		else
+		{
+			$('#addamount-alert-text').text(xhr.responseJSON.error);
+		}
 		$('#addamount-alert').removeClass('collapse');
 	});
+	return false;
 });
 
 $("#addAmountClose").click(function ()
@@ -430,7 +501,14 @@ function amount_remove(article_id)
 		$('#removeAmountModal').modal('show');
 	}, function (xhr, status, errorThrown)
 	{
-		$('#removeamount-alert-text').text(xhr.responseJSON.error);
+		if (xhr.responseJSON.error == undefined)
+		{
+			$('#removeamount-alert-text').text('There wasn an error loading the amount');
+		}
+		else
+		{
+			$('#removeamount-alert-text').text(xhr.responseJSON.error);
+		}
 		$('#removeamount-alert').removeClass('collapse');
 	});
 }
@@ -453,9 +531,17 @@ $("#removeAmountSave").click(function ()
 		$('#removeAmountModal').modal('hide');
 	}, function (xhr, status, errorThrown)
 	{
-		$('#removeamount-alert-text').text(xhr.responseJSON.error);
+		if (xhr.responseJSON.error == undefined)
+		{
+			$('#removeamount-alert-text').text('There wasn an error decrementing the amount');
+		}
+		else
+		{
+			$('#removeamount-alert-text').text(xhr.responseJSON.error);
+		}
 		$('#removeamount-alert').removeClass('collapse');
 	});
+	return false;
 });
 
 $("#removeAmountClose").click(function ()

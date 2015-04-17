@@ -75,24 +75,24 @@
 					</div>
 					<div class="modal-body">
 						<br/>
-						<form class="form-horizontal">
+						<form class="form-horizontal" data-toggle="validator" role="form">
 							<fieldset>
 								<div class="form-group">
 									<label for="name" class="col-lg-2 control-label">Name</label>
 									<div class="col-lg-10">
-										<input type="text" class="form-control" id="name" placeholder="Name">
+										<input type="text" class="form-control" id="name" placeholder="Name" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="formula" class="col-lg-2 control-label">Formula</label>
 									<div class="col-lg-10">
-										<input type="text" class="form-control" id="formula" placeholder="Formula">
+										<input type="text" class="form-control" id="formula" placeholder="Formula" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="volume" class="col-lg-2 control-label">Volume</label>
 									<div class="col-lg-10">
-										<input type="text" class="form-control" id="volume" placeholder="Volume">
+										<input type="text" class="form-control" id="volume" placeholder="Volume" required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -117,16 +117,16 @@
 										<textarea class="form-control" rows="7" id="comments"></textarea>
 									</div>
 								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" id="closeArticle">Close</button>
+									<button type="button" class="btn btn-primary" id="saveArticle">Save</button>
+								</div>
 							</fieldset>
 						</form>
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" id="closeArticle">Close</button>
-						<button type="button" class="btn btn-primary" id="saveArticle">Save</button>
-					</div>
 					<div class="alert alert-dismissable alert-danger collapse" id="article-alert">
 						<button type="button" class="close" id="article-alert-close">×</button>
-						<div id="article-alert-text"><strong>some text</strong></div>
+						<div id="article-alert-text"></div>
 					</div>
         </div>
 			</div>
@@ -141,24 +141,24 @@
 					</div>
 					<div class="modal-body">
 						<br/>
-						<form class="form-horizontal">
+						<form class="form-horizontal" data-toggle="validator" role="form">
 							<fieldset>
 								<div class="form-group">
 									<label for="add-amount" class="col-lg-2 control-label">Amount</label>
 									<div class="col-lg-10">
-										<input type="text" class="form-control" id="amountAdd" placeholder="Amount">
+										<input type="text" pattern="^[0-9]*$" class="form-control" id="amountAdd" placeholder="Amount" required>
 									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" id="addAmountClose" class="btn btn-default">Close</button>
+									<button type="button" id="addAmountSave" class="btn btn-primary">Save</button>
 								</div>
 							</fieldset>
 						</form>
 					</div>
-					<div class="modal-footer">
-						<button type="button" id="addAmountClose" class="btn btn-default">Close</button>
-						<button type="button" id="addAmountSave" class="btn btn-primary">Save</button>
-					</div>
 					<div class="alert alert-dismissable alert-danger collapse" id="addamount-alert">
 						<button type="button" class="close" id="addamount-alert-close">×</button>
-						<div id="addamount-alert-text"><strong>some text</strong></div>
+						<div id="addamount-alert-text"></div>
 					</div>
         </div>
 			</div>
@@ -173,24 +173,24 @@
 					</div>
 					<div class="modal-body">
 						<br/>
-						<form class="form-horizontal">
+						<form class="form-horizontal" data-toggle="validator" role="form">
 							<fieldset>
 								<div class="form-group">
 									<label for="remove-amount" class="col-lg-2 control-label">Amount</label>
 									<div class="col-lg-10">
-										<input type="text" class="form-control" id="amountRemove" placeholder="Amount">
+										<input type="text" pattern="^[0-9]*$" class="form-control" id="amountRemove" placeholder="Amount" required>
 									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" id="removeAmountClose" class="btn btn-default">Close</button>
+									<button type="button" id="removeAmountSave" class="btn btn-primary">Save</button>
 								</div>
 							</fieldset>
 						</form>
 					</div>
-					<div class="modal-footer">
-						<button type="button" id="removeAmountClose" class="btn btn-default">Close</button>
-						<button type="button" id="removeAmountSave" class="btn btn-primary">Save</button>
-					</div>
 					<div class="alert alert-dismissable alert-danger collapse" id="removeamount-alert">
 						<button type="button" class="close" id="removeamount-alert-close">×</button>
-						<div id="removeamount-alert-text"><strong>some text</strong></div>
+						<div id="removeamount-alert-text"></div>
 					</div>
         </div>
 			</div>
