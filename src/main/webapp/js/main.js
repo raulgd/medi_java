@@ -467,6 +467,7 @@ $("#addAmountSave").click(function ()
 						+ '</div>';
 		$('#article-amount-' + obj.article_id).replaceWith(article_amount);
 		$('#addAmountModal').modal('hide');
+		$('#amountAdd').val('');
 	}, function (xhr, status, errorThrown)
 	{
 		if (xhr.responseJSON.error == undefined)
@@ -529,6 +530,7 @@ $("#removeAmountSave").click(function ()
 						+ '</div>';
 		$('#article-amount-' + obj.article_id).replaceWith(article_amount);
 		$('#removeAmountModal').modal('hide');
+		$('#amountRemove').val('');
 	}, function (xhr, status, errorThrown)
 	{
 		if (xhr.responseJSON.error == undefined)
