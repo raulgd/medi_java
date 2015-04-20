@@ -1,5 +1,7 @@
 This is a demo project to show off some of my skills to create an API and use bootstrap with material design to create a modern web application.
 
+The documentation for this project is here: https://doc.jimi.mx/display/MEDI/
+
 This application uses Java 8 and the Glassfish 4.1 application server with a database JDBC connection pool datasource for ORM.
 
 For Java EE 7, it uses EclipseLink as ORM and for the JAX-RS API for REST Services it uses Jersey.
