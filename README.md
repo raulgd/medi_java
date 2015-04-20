@@ -9,3 +9,5 @@ For Java EE 7, it uses EclipseLink as ORM and for the JAX-RS API for REST Servic
 For database it uses MySQL, but because of the JPA 2.0 standard ORM, it can use any RDBMS supported by EclipseLink.
 
 For the web framework it uses Bootstrap with the material design theme from fezvrasta.
+
+For the forms validation it uses the 1000hz bootstrap validator library.
