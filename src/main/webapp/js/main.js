@@ -13,24 +13,6 @@ $(document).ready(function ()
 	// This command is used to initialize some elements and make them work properly
 	$.material.init();
 
-	//alert toggles
-	$('#medi-alert-close').click(function ()
-	{
-		$('#medi-alert').addClass('collapse');
-	});
-	$('#article-alert-close').click(function ()
-	{
-		$('#article-alert').addClass('collapse');
-	});
-	$('#addamount-alert-close').click(function ()
-	{
-		$('#addamount-alert').addClass('collapse');
-	});
-	$('#removeamount-alert-close').click(function ()
-	{
-		$('#removeamount-alert').addClass('collapse');
-	});
-
 	//call the search service and load the article list
 	articleController.search('', function ()
 	{
@@ -263,6 +245,9 @@ $("#addArticleBtn").click(function ()
 
 	//show the form
 	$('#articleModal').modal('show');
+
+	//validate the form to default
+	$('#articleForm').validator('validate');
 });
 
 /*************************************************
@@ -285,6 +270,9 @@ function article_edit(article_id)
 
 		//show the form
 		$('#articleModal').modal('show');
+
+		//validate the form to default
+		$('#articleForm').validator('validate');
 	}, function (xhr, status, errorThrown)
 	{
 		if (xhr.responseJSON.error == undefined)
@@ -437,6 +425,7 @@ function amount_add(article_id)
 	{
 		articleController.selectedArticle = obj;
 		$('#addAmountModal').modal('show');
+		$('#addArticleForm').validator('validate');
 	}, function (xhr, status, errorThrown)
 	{
 		if (xhr.responseJSON.error == undefined)
@@ -500,6 +489,7 @@ function amount_remove(article_id)
 	{
 		articleController.selectedArticle = obj;
 		$('#removeAmountModal').modal('show');
+		$('#removeArticleForm').validator('validate');
 	}, function (xhr, status, errorThrown)
 	{
 		if (xhr.responseJSON.error == undefined)
@@ -551,5 +541,25 @@ $("#removeAmountClose").click(function ()
 	articleController.selectedArticle = null;
 	$('#removeAmountModal').modal('hide');
 	$('#amountRemove').val('');
+	$('#removeamount-alert').addClass('collapse');
+});
+
+/*************************************************
+ * Alert toggles
+ *************************************************/
+$('#medi-alert-close').click(function ()
+{
+	$('#medi-alert').addClass('collapse');
+});
+$('#article-alert-close').click(function ()
+{
+	$('#article-alert').addClass('collapse');
+});
+$('#addamount-alert-close').click(function ()
+{
+	$('#addamount-alert').addClass('collapse');
+});
+$('#removeamount-alert-close').click(function ()
+{
 	$('#removeamount-alert').addClass('collapse');
 });

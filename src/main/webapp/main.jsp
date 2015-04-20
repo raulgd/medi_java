@@ -75,7 +75,7 @@
 					</div>
 					<div class="modal-body">
 						<br/>
-						<form class="form-horizontal" data-toggle="validator" role="form">
+						<form class="form-horizontal" data-toggle="validator" role="form" id="articleForm">
 							<fieldset>
 								<div class="form-group">
 									<label for="name" class="col-lg-2 control-label">Name</label>
@@ -119,7 +119,7 @@
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default" id="closeArticle">Close</button>
-									<button type="button" class="btn btn-primary" id="saveArticle">Save</button>
+									<button type="submit" class="btn btn-primary" id="saveArticle">Save</button>
 								</div>
 							</fieldset>
 						</form>
@@ -141,7 +141,7 @@
 					</div>
 					<div class="modal-body">
 						<br/>
-						<form class="form-horizontal" data-toggle="validator" role="form">
+						<form class="form-horizontal" data-toggle="validator" role="form" id="addArticleForm">
 							<fieldset>
 								<div class="form-group">
 									<label for="add-amount" class="col-lg-2 control-label">Amount</label>
@@ -151,7 +151,7 @@
 								</div>
 								<div class="modal-footer">
 									<button type="button" id="addAmountClose" class="btn btn-default">Close</button>
-									<button type="button" id="addAmountSave" class="btn btn-primary">Save</button>
+									<button type="submit" id="addAmountSave" class="btn btn-primary">Save</button>
 								</div>
 							</fieldset>
 						</form>
@@ -173,7 +173,7 @@
 					</div>
 					<div class="modal-body">
 						<br/>
-						<form class="form-horizontal" data-toggle="validator" role="form">
+						<form class="form-horizontal" data-toggle="validator" role="form" id="removeArticleForm">
 							<fieldset>
 								<div class="form-group">
 									<label for="remove-amount" class="col-lg-2 control-label">Amount</label>
@@ -183,7 +183,7 @@
 								</div>
 								<div class="modal-footer">
 									<button type="button" id="removeAmountClose" class="btn btn-default">Close</button>
-									<button type="button" id="removeAmountSave" class="btn btn-primary">Save</button>
+									<button type="submit" id="removeAmountSave" class="btn btn-primary">Save</button>
 								</div>
 							</fieldset>
 						</form>
