@@ -11,3 +11,5 @@ For database it uses MySQL, but because of the JPA 2.0 standard ORM, it can use 
 For the web framework it uses Bootstrap with the material design theme from fezvrasta.
 
 For the forms validation it uses the 1000hz bootstrap validator library.
+
+For performant material design animation it uses Velocity.js

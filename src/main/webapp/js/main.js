@@ -17,7 +17,8 @@ $(document).ready(function ()
 	articleController.search('', function ()
 	{
 		//on success
-		articleList = '<div class="list-group" id="inventory-list">';
+		$("#inventory-list").hide();
+		articleList = '<div class="list-group display-animation" id="inventory-list">';
 		for (var i in articleController.articles)
 		{
 			a = articleController.articles[i];
@@ -45,6 +46,9 @@ $(document).ready(function ()
 		}
 		articleList += "</div>";
 		$("#inventory-list").replaceWith(articleList);
+		articleListAnimateInit();
+		$("#inventory-list").show();
+		articleListAnimate("in");
 	}, function (xhr, status, errorThrown)
 	{
 		if (xhr.responseJSON.error == undefined)
@@ -87,55 +91,65 @@ $("#searchField").keydown(function (e)
 	{
 		e.preventDefault();
 
-		//remove all articles from the list
-		$('#inventory-list').replaceWith('<div class="list-group" id="inventory-list"></div>');
-
-		//call the search service and load the article list
-		articleController.search($("#searchField").val(), function ()
+		//reverse animation, and after it's complete, reload the list and transition in
+		articleListAnimate("out");
+		$('#inventory-list').one('webkitAnimationEnd oanimationend msAnimationEnd animationend transitionend', function ()
 		{
-			//on success
-			articleList = '<div class="list-group" id="inventory-list">';
-			for (var i in articleController.articles)
+			$("#inventory-list").hide();
+
+			//remove all articles from the list
+			$('#inventory-list').replaceWith('<div class="list-group display-animation" id="inventory-list"></div>');
+
+			//call the search service and load the article list
+			articleController.search($("#searchField").val(), function ()
 			{
-				a = articleController.articles[i];
-				amounts = amount_suffix(a.amount);
-				comments = "";
-				if (a.comments !== null)
+				//on success
+				articleList = '<div class="list-group display-animation" id="inventory-list">';
+				for (var i in articleController.articles)
 				{
-					comments = a.comments;
+					a = articleController.articles[i];
+					amounts = amount_suffix(a.amount);
+					comments = "";
+					if (a.comments !== null)
+					{
+						comments = a.comments;
+					}
+					articleItem =
+									'<div class="list-group-item" id="article-' + a.article_id + '">'
+									+ '<div class="row-content">'
+									+ '<div class="least-content" id="article-amount-' + a.article_id + '">' + amounts + '<br/>'
+									+ '<div class="icon-preview">'
+									+ '<a href="#" data-toggle="modal" data-target="#addAmountModal" onClick="amount_add(' + a.article_id + ')"><i class="mdi-content-add"></i></a> &nbsp; &nbsp;'
+									+ '<a href="#" data-toggle="modal" data-target="#removeAmountModal" onClick="amount_remove(' + a.article_id + ')"><i class="mdi-content-remove"></i></a>'
+									+ '</div>'
+									+ '</div>'
+									+ '<h4 class="list-group-item-heading"><a href="#" data-toggle="modal" data-target="#articleModal" id="article-title-' + a.article_id + '" onClick="article_edit(' + a.article_id + ')"> ' + a.name + ' </a></h4>'
+									+ '<p class="list-group-item-text" id="article-content-' + a.article_id + '">' + a.formula + ' ' + a.volume + '<br/>Usage: ' + a.usage_id.name + '<br/>By ' + a.brand_id.name + ' <br/> ' + comments + ' </p>'
+									+ '</div>'
+									+ '<div class="list-group-separator-full"></div>'
+									+ '</div>';
+					articleList += articleItem;
 				}
-				articleItem =
-								'<div class="list-group-item" id="article-' + a.article_id + '">'
-								+ '<div class="row-content">'
-								+ '<div class="least-content" id="article-amount-' + a.article_id + '">' + amounts + '<br/>'
-								+ '<div class="icon-preview">'
-								+ '<a href="#" data-toggle="modal" data-target="#addAmountModal" onClick="amount_add(' + a.article_id + ')"><i class="mdi-content-add"></i></a> &nbsp; &nbsp;'
-								+ '<a href="#" data-toggle="modal" data-target="#removeAmountModal" onClick="amount_remove(' + a.article_id + ')"><i class="mdi-content-remove"></i></a>'
-								+ '</div>'
-								+ '</div>'
-								+ '<h4 class="list-group-item-heading"><a href="#" data-toggle="modal" data-target="#articleModal" id="article-title-' + a.article_id + '" onClick="article_edit(' + a.article_id + ')"> ' + a.name + ' </a></h4>'
-								+ '<p class="list-group-item-text" id="article-content-' + a.article_id + '">' + a.formula + ' ' + a.volume + '<br/>Usage: ' + a.usage_id.name + '<br/>By ' + a.brand_id.name + ' <br/> ' + comments + ' </p>'
-								+ '</div>'
-								+ '<div class="list-group-separator-full"></div>'
-								+ '</div>';
-				articleList += articleItem;
-			}
-			articleList += "</div>";
-			$("#inventory-list").replaceWith(articleList);
-		}, function (xhr, status, errorThrown)
-		{
-			if (xhr.responseJSON.error == undefined)
+				articleList += "</div>";
+				$("#inventory-list").replaceWith(articleList);
+				articleListAnimateInit();
+				$("#inventory-list").show();
+				articleListAnimate("in");
+			}, function (xhr, status, errorThrown)
 			{
-				$('#medi-alert-text').text('There was an error loading the article list');
-			}
-			else
-			{
-				$('#medi-alert-text').text(xhr.responseJSON.error);
-			}
-			$('#medi-alert').removeClass('collapse');
-		});
+				if (xhr.responseJSON.error == undefined)
+				{
+					$('#medi-alert-text').text('There was an error loading the article list');
+				}
+				else
+				{
+					$('#medi-alert-text').text(xhr.responseJSON.error);
+				}
+				$('#medi-alert').removeClass('collapse');
+			});
 
-		return false;
+			return false;
+		});
 	}
 });
 

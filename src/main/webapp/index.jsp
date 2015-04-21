@@ -43,7 +43,7 @@
     <title>
 			Medi - The Medical Inventory Web Application
     </title>
-		<link href="${appRoot}/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/roboto.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/material.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/ripples.min.css" rel="stylesheet">
@@ -77,20 +77,20 @@
 							<form class="form-horizontal" method="post" action="${appRoot}/login" data-toggle="validator" role="form">
 								<fieldset>
 									<legend>Login</legend>
-									<%= errorMsg %>
-									<div class="form-group <%= hasError %>">
+									<%= errorMsg%>
+									<div class="form-group <%= hasError%>">
 										<div class="col-lg-10">
 											<input type="email" data-error="the email address is invalid" name="email" class="form-control floating-label" id="email" placeholder="e-Mail" required>
 										</div>
 									</div>
-									<div class="form-group <%= hasError %>">
+									<div class="form-group <%= hasError%>">
 										<div class="col-lg-10">
 											<input type="password" name="password" class="form-control floating-label" id="password" placeholder="Password" required>
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-lg-10 col-lg-offset-6">
-											<button type="submit" class="btn <%= btnStyle %>">Enter</button>
+											<button type="submit" class="btn <%= btnStyle%>">Enter</button>
 										</div>
 									</div>
 								</fieldset>
@@ -111,8 +111,10 @@
 		</div>
 
     <!-- Bootstrap core JavaScript placed at the end of the document so the pages load faster -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-		<script src="${appRoot}/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/velocity/1.2.2/velocity.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/velocity/1.2.2/velocity.ui.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<script src="${appRoot}/js/ripples.min.js"></script>
 		<script src="${appRoot}/js/material.min.js"></script>
 		<script src="${appRoot}/js/validator.min.js"></script>

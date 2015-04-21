@@ -11,11 +11,12 @@
 			//load the appRoot so the application can be released with any prefixed URL
 			var appRoot = '${appRoot}';
 		</script>
-		<link href="${appRoot}/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/roboto.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/material.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/ripples.min.css" rel="stylesheet">
 		<link href="${appRoot}/css/main_style.css" rel="stylesheet">
+		<link href="${appRoot}/css/main_animations.css" rel="stylesheet">
 	</head>
 	<body class="home">
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -60,7 +61,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
-					<div class="list-group" id="inventory-list">
+					<div class="list-group display-animation" id="inventory-list">
 					</div>
 				</div>
 			</div>
@@ -197,8 +198,10 @@
 		</div>
 
     <!-- Bootstrap core JavaScript placed at the end of the document so the pages load faster -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-		<script src="${appRoot}/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/velocity/1.2.2/velocity.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/velocity/1.2.2/velocity.ui.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<script src="${appRoot}/js/ripples.min.js"></script>
 		<script src="${appRoot}/js/material.min.js"></script>
 		<script src="${appRoot}/js/validator.min.js"></script>
@@ -208,6 +211,7 @@
 		<script src="${appRoot}/js/rest/inventory.js"></script>
 		<script src="${appRoot}/js/rest/user.js"></script>
 		<script src="${appRoot}/js/main.js"></script>
+		<script src="${appRoot}/js/main_animations.js"></script>
 
 	</body>
 </html>
